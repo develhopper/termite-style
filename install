@@ -65,7 +65,7 @@ prerequisite() {
 ## Check for previous installation
 check_prev () {
 	banner
-	if [[ (-L /usr/bin/termite-style) && (-d /usr/share/termite-style) ]]; then
+	if [[ (-L $HOME/.local/bin/termite-style) && (-d $HOME/.local/share/termite-style) ]]; then
 		{ echo; echo ${GREEN}"    [!] ${MAGENTA}termite-style ${GREEN}is already installed."; }
 		{ read -p ${ORANGE}"    [?] Do you wanna re-install it? (y/n): "; echo; }
 		if [[ "$REPLY" =~ ^[y/Y]$ ]]; then
@@ -82,9 +82,9 @@ check_prev () {
 install_tstyle () {
 	echo ${ORANGE}"    [*] Installing termite-style..."
 	# Delete old files
-	if [[ (-L /usr/bin/termite-style) && (-d /usr/share/termite-style) ]]; then
+	if [[ (-L $HOME/.local/bin/termite-style) && (-d $HOME/.local/share/termite-style) ]]; then
 		echo ${RED}"    [*] Deleting files from previous installation..."${BLUE}
-		{ printf "    "; sudo rm -r /usr/bin/termite-style /usr/share/termite-style /usr/share/fonts/termite-style; echo; }
+		{ printf "    "; rm -r $HOME/.local/bin/termite-style $HOME/.local/share/termite-style; echo; }
 	fi
 	# Termite config dir
 	if [[ ! -d $TERMITE_DIR ]]; then
@@ -97,13 +97,13 @@ install_tstyle () {
 	# Copy new config
 	cp $DIR/config $TERMITE_DIR
 	# Coping files
-	{ echo ${ORANGE}"    [*] Coping files in '/usr/share' directory"${BLUE}; }
-	{ printf "    "; sudo mkdir /usr/share/termite-style; sudo mkdir /usr/share/fonts/termite-style; }
-	{ sudo cp -r $DIR/colors /usr/share/termite-style/; sudo cp -r $DIR/fonts/* /usr/share/fonts/termite-style/; sudo cp -r $DIR/tstyle /usr/share/termite-style/; }
-	{ sudo chmod +x /usr/share/termite-style/tstyle; sudo fc-cache; sudo ln -s /usr/share/termite-style/tstyle /usr/bin/termite-style; }
+	{ echo ${ORANGE}"    [*] Coping files in '~/.local/share' directory"${BLUE}; }
+	{ printf "    "; mkdir $HOME/.local/share/termite-style; }
+	{ cp -r $DIR/colors $HOME/.local/share/termite-style/; cp -r $DIR/tstyle $HOME/.local/share/termite-style/; }
+	{ chmod +x $HOME/.local/share/termite-style/tstyle; ln -s $HOME/.local/share/termite-style/tstyle $HOME/.local/bin/termite-style; }
 
 	# Verify files 
-	if [[ (-L /usr/bin/termite-style) && (-d /usr/share/termite-style) ]]; then
+	if [[ (-L $HOME/.local/bin/termite-style) && (-d $HOME/.local/share/termite-style) ]]; then
 		{ echo; echo ${GREEN}"    [*] Successfully Installed."; }
 		{ echo ${GREEN}"    [*] Now You Can Run This Program By Just typing ${MAGENTA}termite-style${GREEN}."; echo; }
 		{ reset_color; exit 0; }
